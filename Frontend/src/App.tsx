@@ -1,30 +1,24 @@
-import axios from "axios";
-import { useState, useEffect } from 'react';
+import Register from "./Authentication/Register";
+import Login from './Authentication/Login';
+import HomePage from './MainPage/HomePage';
+import { Routes, Route } from "react-router-dom";
+
+
+
 
 function App() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    function getBackendApi() {
-      axios.get("http://localhost:5000/Signup").then(response => {
-        setData(response.data.message);
-
-        console.log(response.data.message);
-      }).catch(err => {
-        console.error("CORS or network error ", err);
-        
-      })
-    }
-
-    getBackendApi();
-  }, []);
-
+  
   
   
   return (
 
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>{data || "Loading..."}</h1>
+    <div >
+      <Routes>
+        <Route path="/" element={<Register />}></Route>
+        <Route path="/Login" element={<Login />}></Route>  
+        <Route path="/HomePage" element={<HomePage />}></Route>
+      </Routes>
+      
     </div>
   )
 }

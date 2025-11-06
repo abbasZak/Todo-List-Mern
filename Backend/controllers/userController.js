@@ -2,32 +2,39 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
 const createUser = async (req, res) => {
-    
+  try {
+    const { fullName, email, password } = req.body;
 
-    try {
-        const { fullName, email, password  } = req.body;
+    // Check if all fields are provided
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-        const hashedPassword = await bcrypt(password, 10);
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Account already exists" });
+    }
 
+    // Hash the password correctly
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        if (!fullName || !email || !password) {
-            res.status(400).json({message: "All fields are required"});
-        }
+    // Create user
+    const newUser = await User.create({
+      fullName,
+      email,
+      password: hashedPassword,
+    });
 
-        // Check if user exists
-        const existingUser = User.findOne({ email });
-
-        if( existingUser ) {
-            res.status(201).json({message: "Account already exists"});
-        }
-
-        let newUser =  User.create({fullName, email, password: hashedPassword});
-        res.status(201).json({ message: "User registered successfully", newUser });
-        
-} catch(error) {
-    res.status(500).json({ message: error.message });
-}
-    
+    // Respond success
+    return res.status(201).json({
+      message: "User registered successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("❌ Error in createUser:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 module.exports = { createUser };
