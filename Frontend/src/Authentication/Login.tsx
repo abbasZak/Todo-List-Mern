@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Mail, User, Lock, Sparkles } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 export default function Login() {
@@ -12,6 +13,7 @@ export default function Login() {
   });
   const[message, setMessage] = useState("");
   const [focused, setFocused] = useState('');
+  const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -19,14 +21,16 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/Register", formData);
-      setMessage(res.data.message);
+      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
       enqueueSnackbar(res?.data?.message, {variant: "success"});
       setFormData({
         fullName: '',
         email: '',
         password: ''
     })
+
+    navigate('/HomePage');
+
       
     } catch(err: any) {
       setFormData({

@@ -10,7 +10,9 @@ const userRoute = require("./routes/userRoutes");
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use("/Register", userRoute);
+app.use("/api/auth", userRoute);
+
+
 
 // Connect to MongoDB first, then start server
 mongoose.connect(process.env.CONNECTION_STRING)
