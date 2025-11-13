@@ -169,7 +169,10 @@ export default function Register() {
         <div className="mt-8 text-center">
           <p className="text-gray-600">
             Already have an account?{' '}
-            <button className="text-purple-600 font-semibold hover:text-purple-700 transition-colors">
+            <button 
+            className="text-purple-600 font-semibold cursor-pointer hover:text-purple-700 transition-colors cursor:pointer"
+            onClick={() => navigate("/Login")}
+            >
               Sign in
             </button>
           </p>

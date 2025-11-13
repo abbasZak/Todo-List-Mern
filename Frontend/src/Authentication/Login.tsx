@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, User, Lock, Sparkles } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ export default function Login() {
     email: '',
     password: ''
   });
+  const [user, setUser] = useState(null);
   const[message, setMessage] = useState("");
   const [focused, setFocused] = useState('');
   const navigate = useNavigate();
@@ -28,6 +29,10 @@ export default function Login() {
         email: '',
         password: ''
     })
+
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
 
     navigate('/HomePage');
 
@@ -53,6 +58,8 @@ export default function Login() {
       [e.target.name]: e.target.value
     });
   };
+
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4 relative overflow-hidden">
@@ -87,7 +94,7 @@ export default function Login() {
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Mail className={`w-5 h-5 transition-colors ${focused === 'email' ? 'text-purple-500' : 'text-gray-400'}`} />
-              </div>
+              </div>                
               <input
                 type="email"
                 id="email"
